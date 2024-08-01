@@ -4,6 +4,7 @@ import https from 'https'
 
 export const utilService = {
     readJsonFile,
+    writeJsonFile,
     download,
     httpGet,
     makeId
@@ -11,9 +12,19 @@ export const utilService = {
 
 
 function readJsonFile(path) {
-    const str = fs.readFileSync(path, 'utf8')
-    const json = JSON.parse(str)
-    return json
+    const json = fs.readFileSync(path, 'utf8')
+    const data = JSON.parse(json)
+    return data
+}
+
+function writeJsonFile(path, data) {
+    return new Promise((resolve, reject) => {
+        const json = JSON.stringify(data, null, 2)
+        fs.writeFile(path, json, err => {
+            if (err) reject(err)
+            resolve(json)
+        })
+    })
 }
 
 function download(url, fileName) {

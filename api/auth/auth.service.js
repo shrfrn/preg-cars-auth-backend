@@ -50,7 +50,6 @@ async function login(username, password) {
         // Additional fields required for miniuser
     }
     return miniUser
-
 }
 
 async function signup({ username, password, fullname }) {

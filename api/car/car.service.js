@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 import { loggerService } from '../../services/logger.service.js'
 import { utilService } from './../../services/util.service.js';
 
@@ -10,11 +8,8 @@ export const carService = {
     save
 }
 
-var cars = utilService.readJsonFile('./data/car.json')
 const PAGE_SIZE = 4
-
-
-
+var cars = utilService.readJsonFile('./data/car.json')
 
 async function query(filterBy = {}) {
     try {
@@ -57,7 +52,7 @@ async function remove(carId) {
         if (idx === -1) throw `Couldn't find car with _id ${carId}`
 
         cars.splice(idx, 1)
-        await _saveCarsToFile('./data/car.json')
+        await _saveCarsToFile()
     } catch (err) {
         loggerService.error('carService[remove] : ', err)
         throw err
@@ -70,13 +65,13 @@ async function save(carToSave) {
             const idx = cars.findIndex(car => car._id === carToSave._id)
             if (idx === -1) throw `Couldn't find car with _id ${carId}`
 
-            cars.splice(idx, 1, {...car, ...carToSave })
+            cars.splice(idx, 1, {...cars, ...carToSave })
         } else {
             carToSave._id = utilService.makeId()
             carToSave.createdAt = Date.now()
             cars.push(carToSave)
         }
-        await _saveCarsToFile('./data/car.json')
+        await _saveCarsToFile()
         return carToSave
     } catch (err) {
         loggerService.error('carService[save] : ' + err)
@@ -84,12 +79,6 @@ async function save(carToSave) {
     }
 }
 
-function _saveCarsToFile(path) {
-    return new Promise((resolve, reject) => {
-        const data = JSON.stringify(cars, null, 2)
-        fs.writeFile(path, data, (err) => {
-            if (err) return reject(err)
-            resolve()
-        })
-    })
+function _saveCarsToFile() {
+    return utilService.writeJsonFile('./data/car.json', cars)
 }

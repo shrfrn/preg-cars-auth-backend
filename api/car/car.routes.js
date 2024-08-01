@@ -3,7 +3,6 @@ import { addCar, getCar, getCars, removeCar, updateCar } from './car.controller.
 
 const router = express.Router()
 
-
 router.get('/', getCars)
 router.get('/:carId', getCar)
 router.delete('/:carId', removeCar)

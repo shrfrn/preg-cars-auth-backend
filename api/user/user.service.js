@@ -1,7 +1,5 @@
-import fs from 'fs'
 import { utilService } from '../../services/util.service.js'
 import { loggerService } from '../../services/logger.service.js'
-
 
 const users = utilService.readJsonFile('data/user.json')
 
@@ -12,8 +10,6 @@ export const userService = {
     save,
     getByUsername
 }
-
-
 
 async function query() {
     return users
@@ -33,7 +29,6 @@ async function getById(userId) {
 async function getByUsername(username) {
     try {
         const user = users.find(user => user.username === username)
-        if (!user) throw `User not found by username : ${username}`
         return user
     } catch (err) {
         loggerService.error('userService[getByUsername] : ', err)
@@ -55,13 +50,15 @@ async function remove(userId) {
 }
 
 async function save(user) {
+    // Only handles user ADD for now
     try {
-        // Only handles user ADD for now
         user._id = utilService.makeId()
         user.score = 10000
         user.createdAt = Date.now()
         if (!user.imgUrl) user.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+        
         users.push(user)
+    
         await _saveUsersToFile()
         return user
     } catch (err) {
@@ -71,14 +68,5 @@ async function save(user) {
 }
 
 function _saveUsersToFile() {
-    return new Promise((resolve, reject) => {
-
-        const usersStr = JSON.stringify(users, null, 2)
-        fs.writeFile('data/user.json', usersStr, (err) => {
-            if (err) {
-                return console.log(err);
-            }
-            resolve()
-        })
-    })
+    return utilService.writeJsonFile('data/user.json', users)
 }

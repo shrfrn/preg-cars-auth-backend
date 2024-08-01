@@ -1,8 +1,7 @@
-// Car CRUDL API
-import { authService } from '../auth/auth.service.js';
-import { carService } from './car.service.js';
+import { carService } from './car.service.js'
 
-// List
+// Car CRUDL API
+
 export async function getCars(req, res) {
     try {
         const filterBy = {
@@ -17,10 +16,10 @@ export async function getCars(req, res) {
     }
 }
 
-// Get
 export async function getCar(req, res) {
     const { carId } = req.params
     const lastCarId = req.cookies.lastCarId
+
     try {
         if (lastCarId === carId) return res.status(400).send('Please wait a bit')
         const car = await carService.getById(carId)
@@ -32,9 +31,9 @@ export async function getCar(req, res) {
 }
 
 
-// // Delete
 export async function removeCar(req, res) {
     const { carId } = req.params
+
     try {
         await carService.remove(carId)
         res.send('Deleted OK')
@@ -44,11 +43,8 @@ export async function removeCar(req, res) {
 }
 
 
-// // Save
 export async function addCar(req, res) {
     const { vendor, speed } = req.body
-        // Better use createCar()
-
     const carToSave = { vendor, speed: +speed }
 
     try {

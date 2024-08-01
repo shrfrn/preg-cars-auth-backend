@@ -1,3 +1,5 @@
+import { loggerService } from './services/logger.service.js'
+
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -48,8 +50,6 @@ app.get('/nono', (req, res) => {
 app.get('/**', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
 })
-
-import { loggerService } from './services/logger.service.js'
 
 const PORT = process.env.PORT || 3030
 app.listen(PORT, () => {
