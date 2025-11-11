@@ -1,3 +1,4 @@
 node_modules
 logs/backend.log
 package-lock.json
+.DS_Store

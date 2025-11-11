@@ -65,7 +65,7 @@ async function save(carToSave) {
             const idx = cars.findIndex(car => car._id === carToSave._id)
             if (idx === -1) throw `Couldn't find car with _id ${carId}`
 
-            cars.splice(idx, 1, {...cars, ...carToSave })
+            cars.splice(idx, 1, {...cars[idx], ...carToSave })
         } else {
             carToSave._id = utilService.makeId()
             carToSave.createdAt = Date.now()
